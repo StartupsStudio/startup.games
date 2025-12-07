@@ -1,0 +1,652 @@
+---
+title: "Seasonal Leaderboards: Fresh Starts and New Opportunities Every Quarter"
+description: "Discover how seasonal resets create perpetual opportunity and sustained motivation for founders at all levels in 2026."
+date: "2026-05-14"
+author: "Startup Games Team"
+tags: ["leaderboards", "seasons", "fresh-starts", "competition"]
+---
+
+# Seasonal Leaderboards: Fresh Starts and New Opportunities Every Quarter
+
+Perpetual leaderboards have a fatal flaw: early adopters dominate forever, newcomers have no realistic path to the top, and everyone else gives up. Seasonal leaderboards solve this with regular resets that give everyone a fresh start.
+
+## The Perpetual Leaderboard Problem
+
+### Why Always-On Leaderboards Fail
+
+```typescript
+const perpetualLeaderboard = {
+  year1: {
+    top10: ['Early adopters'],
+    everyone_else: 'No chance of catching up'
+  },
+
+  year2: {
+    top10: ['Same early adopters'],
+    everyone_else: 'Still no chance',
+    newFounders: 'Why even try?'
+  },
+
+  year3: {
+    engagement: 'Only top players care',
+    newSignups: 'Ignore leaderboard',
+    motivation: 'System has failed'
+  }
+};
+```
+
+Problems:
+- **Entrenched leaders**: Top spots never change
+- **Newcomer discouragement**: "I'm 10,000 points behind, why bother?"
+- **Reduced competition**: Most founders stop competing
+- **Stale rankings**: No excitement or drama
+
+## The Seasonal Solution
+
+### Quarterly Resets
+
+```typescript
+export interface Season {
+  id: string;
+  name: string;
+  number: number;
+  theme?: string;
+
+  duration: {
+    start: string; // Quarter start
+    end: string; // Quarter end
+    daysRemaining: number;
+  };
+
+  leaderboards: {
+    overall: Leaderboard;
+    categories: Record<string, Leaderboard>;
+    cohorts: Record<string, Leaderboard>;
+  };
+
+  rewards: {
+    top10: SeasonReward;
+    top100: SeasonReward;
+    participation: SeasonReward;
+    improvement: SeasonReward; // Biggest gainers
+  };
+
+  special: {
+    bonusEvents: Event[];
+    doubleXPDays: string[];
+    specialChallenges: Challenge[];
+  };
+}
+
+export const seasons2026 = {
+  q1: {
+    name: 'Fresh Start Season',
+    theme: 'New Year, New Momentum',
+    start: '2026-01-01',
+    end: '2026-03-31',
+    bonusObjective: 'Launch MVPs'
+  },
+
+  q2: {
+    name: 'Growth Season',
+    theme: 'Scale and Iterate',
+    start: '2026-04-01',
+    end: '2026-06-30',
+    bonusObjective: 'Achieve PMF'
+  },
+
+  q3: {
+    name: 'Summer Sprint',
+    theme: 'Ship Fast, Learn Faster',
+    start: '2026-07-01',
+    end: '2026-09-30',
+    bonusObjective: 'Rapid Experimentation'
+  },
+
+  q4: {
+    name: 'Championship Season',
+    theme: 'Year-End Push',
+    start: '2026-10-01',
+    end: '2026-12-31',
+    bonusObjective: 'End Strong'
+  }
+};
+```
+
+### Why Quarterly Works
+
+**Long enough**: 90 days to make real progress
+**Short enough**: Finish line is visible
+**Natural rhythm**: Aligns with business quarters
+**Multiple chances**: 4 opportunities per year to win
+
+## Season Mechanics
+
+### Season Start
+
+Everyone begins at zero:
+
+```typescript
+export const startNewSeason = agenticFunction({
+  async execute() {
+    const season = await getCurrentSeason();
+
+    // Reset seasonal metrics (keep lifetime stats)
+    await resetSeasonalLeaderboards();
+
+    // Notify all founders
+    await notifyAllFounders({
+      type: 'new-season',
+      message: `${season.name} has begun! Fresh leaderboards, fresh start.`,
+      seasonDetails: season
+    });
+
+    // Create season-specific challenges
+    await generateSeasonChallenges(season);
+
+    // Set up bonus events
+    await scheduleSeasonEvents(season);
+
+    return season;
+  }
+});
+
+export const resetSeasonalLeaderboards = async () => {
+  const founders = await getAllFounders();
+
+  for (const founder of founders) {
+    await updateFounder(founder.id, {
+      seasonalXP: 0,
+      seasonalRank: null,
+      seasonalAchievements: [],
+      seasonStartLevel: founder.level, // Track for improvement rewards
+      seasonStartMRR: founder.metrics.mrr
+    });
+  }
+
+  // Create fresh leaderboards
+  await createSeasonLeaderboards();
+};
+```
+
+### During Season
+
+Real-time competition:
+
+```typescript
+export const updateSeasonalLeaderboard = agenticFunction({
+  schedule: 'every 15 minutes',
+  async execute() {
+    const season = await getCurrentSeason();
+    const founders = await getActiveFounders();
+
+    // Calculate seasonal scores
+    const scores = await Promise.all(
+      founders.map(async f => ({
+        founderId: f.id,
+        seasonalXP: f.seasonalXP,
+        seasonalScore: await calculateSeasonalScore(f, season)
+      }))
+    );
+
+    // Update rankings
+    scores.sort((a, b) => b.seasonalScore - a.seasonalScore);
+
+    for (let i = 0; i < scores.length; i++) {
+      const entry = scores[i];
+      const previousRank = await getSeasonalRank(entry.founderId);
+      const newRank = i + 1;
+
+      await updateSeasonalRank(entry.founderId, newRank);
+
+      // Notify of significant rank changes
+      if (previousRank && Math.abs(newRank - previousRank) >= 5) {
+        await notifyRankChange({
+          founderId: entry.founderId,
+          oldRank: previousRank,
+          newRank,
+          direction: newRank < previousRank ? 'up' : 'down'
+        });
+      }
+    }
+
+    await saveSeasonalLeaderboard(season.id, scores);
+  }
+});
+```
+
+### Season End
+
+Celebrate and reward:
+
+```typescript
+export const endSeason = agenticFunction({
+  async execute() {
+    const season = await getCurrentSeason();
+    const leaderboard = await getSeasonalLeaderboard(season.id);
+
+    // Award seasonal rewards
+    await awardSeasonalRewards({
+      season,
+      leaderboard,
+      rewards: season.rewards
+    });
+
+    // Generate season recap
+    for (const entry of leaderboard) {
+      const recap = await generateSeasonRecap(entry.founderId, season);
+      await sendSeasonRecap(entry.founderId, recap);
+    }
+
+    // Announce winners
+    await announceSeasonWinners(season, leaderboard.slice(0, 10));
+
+    // Archive season data
+    await archiveSeason(season);
+
+    // Prepare next season
+    await prepareNextSeason();
+  }
+});
+
+async function generateSeasonRecap(founderId: string, season: Season) {
+  const founder = await getFounder(founderId);
+  const seasonData = await getSeasonData(founderId, season.id);
+
+  return {
+    rank: seasonData.finalRank,
+    totalFounders: seasonData.totalParticipants,
+    percentile: (seasonData.finalRank / seasonData.totalParticipants) * 100,
+
+    achievements: {
+      seasonalXP: seasonData.totalXP,
+      achievementsUnlocked: seasonData.achievements.length,
+      questsCompleted: seasonData.quests.length,
+      streakDays: seasonData.activeDays
+    },
+
+    growth: {
+      levelGain: founder.level - seasonData.startLevel,
+      mrrGrowth: founder.metrics.mrr - seasonData.startMRR,
+      customersAdded: seasonData.customersAdded,
+      deploymentsCount: seasonData.deployments
+    },
+
+    highlights: await selectSeasonHighlights(seasonData),
+
+    comparison: {
+      vsLastSeason: await compareToLastSeason(founderId, season),
+      vsCohort: await compareToSeasonal Cohort(founderId, season)
+    },
+
+    rewards: seasonData.rewardsEarned
+  };
+}
+```
+
+## Multiple Season Formats
+
+### Standard Season
+
+3-month quarters:
+
+```typescript
+const standardSeason = {
+  duration: 90,
+  reset: 'quarterly',
+  rewards: 'standard',
+  theme: 'varies'
+};
+```
+
+### Monthly Mini-Seasons
+
+Faster cycles for specific metrics:
+
+```typescript
+const monthlyMiniSeason = {
+  name: 'Shipping Speed Challenge',
+  duration: 30,
+  metric: 'deployments',
+  reset: 'monthly',
+  rewards: 'focused'
+};
+```
+
+### Annual Championship
+
+Year-long prestige competition:
+
+```typescript
+const annualChampionship = {
+  name: '2026 Founder of the Year',
+  duration: 365,
+  reset: 'yearly',
+  rewards: 'major',
+  qualification: 'Top seasonal performers auto-qualify'
+};
+```
+
+### Event Seasons
+
+Special themed seasons:
+
+```typescript
+const eventSeasons = {
+  summerBootcamp: {
+    name: 'Summer Bootcamp Season',
+    duration: 60,
+    theme: 'Intensive learning and shipping',
+    bonusXP: 1.5,
+    specialRewards: ['Bootcamp graduate badge']
+  },
+
+  holidayHustle: {
+    name: 'Holiday Hustle',
+    duration: 45,
+    theme: 'End year strong',
+    bonusXP: 2.0,
+    specialRewards: ['Year-end champion']
+  }
+};
+```
+
+## Season-Specific Mechanics
+
+### Seasonal Bonuses
+
+Unique rewards each season:
+
+```typescript
+export const seasonalBonuses = {
+  q1_2026: {
+    doubleXPDays: ['2026-01-15', '2026-02-14', '2026-03-15'],
+    bonusAchievements: [
+      {
+        id: 'fresh-start-champion',
+        requirement: 'Top 100 in Q1',
+        reward: 'Permanent +5% XP bonus'
+      }
+    ],
+    specialEvents: [
+      {
+        name: 'New Year Launch Party',
+        date: '2026-01-15',
+        bonus: '3x XP for launches'
+      }
+    ]
+  }
+};
+```
+
+### Seasonal Quests
+
+Time-limited quest lines:
+
+```typescript
+export const seasonalQuestLine = {
+  q2_2026: {
+    name: 'Path to Product-Market Fit',
+    quests: [
+      {
+        id: 'talk-to-100-users',
+        requirement: 'Conduct 100 customer interviews',
+        reward: { xp: 5000, badge: 'customer-whisperer' },
+        seasonal: true // Expires at season end
+      },
+      {
+        id: 'iterate-based-on-feedback',
+        requirement: 'Ship 10 features based on customer feedback',
+        reward: { xp: 3000, unlock: 'advanced-analytics' },
+        seasonal: true
+      },
+      {
+        id: 'achieve-pmf',
+        requirement: 'Reach PMF metrics',
+        reward: { xp: 10000, badge: 'pmf-achiever', credits: 5000 },
+        seasonal: true,
+        legendary: true
+      }
+    ],
+    completionBonus: {
+      xp: 20000,
+      badge: 'q2-quest-master',
+      title: 'PMF Champion'
+    }
+  }
+};
+```
+
+## Cohort Seasons
+
+Compete against similar founders:
+
+```typescript
+export const cohortSeasons = {
+  earlyStage: {
+    criteria: { mrr: { max: 1000 }, age: { max: 6 } },
+    seasons: 'parallel',
+    rewards: 'stage-appropriate'
+  },
+
+  growthStage: {
+    criteria: { mrr: { min: 1000, max: 10000 }, age: { min: 6, max: 24 } },
+    seasons: 'parallel',
+    rewards: 'growth-focused'
+  },
+
+  scaleStage: {
+    criteria: { mrr: { min: 10000 } },
+    seasons: 'parallel',
+    rewards: 'prestige'
+  }
+};
+
+export const getCohortSeason = codeFunction({
+  input: z.object({
+    founderId: z.string()
+  }),
+  async execute({ founderId }) {
+    const founder = await getFounder(founderId);
+
+    // Determine cohort
+    const cohort = determineCohort(founder);
+
+    // Get cohort-specific seasonal leaderboard
+    const leaderboard = await getCohortSeasonalLeaderboard(cohort);
+
+    return {
+      cohort,
+      leaderboard,
+      rank: leaderboard.findIndex(e => e.founderId === founderId) + 1,
+      eligibleRewards: await getEligibleRewards(founderId, cohort)
+    };
+  }
+});
+```
+
+## The Fresh Start Effect
+
+### Psychological Reset
+
+Seasons leverage the "fresh start effect":
+
+```typescript
+const freshStartEffect = {
+  phenomenon: 'People more motivated to change behavior at temporal landmarks',
+
+  examples: [
+    'New Year resolutions',
+    'Monday fresh starts',
+    'Birthday goal-setting',
+    'New quarter planning'
+  ],
+
+  application: {
+    seasonStart: 'Quarterly reset point',
+    founder Response: 'Increased motivation',
+    actionTaken: 'Set new goals, recommit',
+    duration: '2-4 weeks of elevated motivation'
+  },
+
+  metrics: {
+    signupIncrease: '+40% in first week of season',
+    activityIncrease: '+65% in first 2 weeks',
+    goalSetting: '+80% set new goals',
+    engagement: '+55% overall engagement'
+  }
+};
+```
+
+### Comeback Stories
+
+Seasons enable dramatic comebacks:
+
+```typescript
+export const trackComebackStory = codeFunction({
+  input: z.object({
+    founderId: z.string(),
+    seasonId: z.string()
+  }),
+  async execute({ founderId, seasonId }) {
+    const lastSeason = await getLastSeason(seasonId);
+    const lastRank = await getSeasonRank(founderId, lastSeason.id);
+    const currentRank = await getCurrentSeasonRank(founderId);
+
+    if (lastRank > 100 && currentRank <= 10) {
+      // Dramatic comeback!
+      await unlockAchievement(founderId, 'comeback-kid');
+
+      await featuredStory({
+        founderId,
+        title: 'The Comeback Story of the Season',
+        data: {
+          lastSeason: { rank: lastRank },
+          thisSeason: { rank: currentRank },
+          improvement: lastRank - currentRank
+        }
+      });
+    }
+
+    return { comeback: currentRank < lastRank };
+  }
+});
+```
+
+## Season Transitions
+
+### Pre-Season Hype
+
+Build anticipation:
+
+```typescript
+export const buildSeasonHype = agenticFunction({
+  schedule: '1 week before season',
+  async execute() {
+    const nextSeason = await getNextSeason();
+
+    // Announce theme and special features
+    await announceNextSeason(nextSeason);
+
+    // Preview rewards
+    await previewSeasonalRewards(nextSeason);
+
+    // Share last season champions
+    await spotlightLastSeasonWinners();
+
+    // Enable pre-registration
+    await enableSeasonRegistration(nextSeason);
+  }
+});
+```
+
+### Post-Season Celebration
+
+Honor achievements:
+
+```typescript
+export const celebrateSeason = agenticFunction({
+  async execute() {
+  const endedSeason = await getEndedSeason();
+    const winners = await getSeasonWinners(endedSeason.id);
+
+    // Hall of Fame
+    await addToHallOfFame(winners);
+
+    // Public celebration
+    await hostVirtualCeremony(endedSeason);
+
+    // Individual congratulations
+    for (const winner of winners) {
+      await sendCongratulatoryMessage(winner);
+      await awardSeasonBadge(winner, endedSeason);
+    }
+
+    // Community highlights video
+    await generateSeasonHighlightsVideo(endedSeason);
+  }
+});
+```
+
+## Best Practices
+
+### 1. Preserve Lifetime Stats
+
+Reset seasonal, keep all-time:
+
+```typescript
+const founderStats = {
+  seasonal: {
+    xp: 0, // Resets each season
+    rank: null,
+    achievements: []
+  },
+
+  lifetime: {
+    xp: 42500, // Never resets
+    totalAchievements: 247,
+    historicalRanks: [15, 8, 22, 5], // Past season ranks
+    bestRank: 5,
+    seasonsParticipated: 4
+  }
+};
+```
+
+### 2. Reward Consistency
+
+Recognize multi-season performers:
+
+```typescript
+const consistencyRewards = {
+  top100_2seasons: { badge: 'consistent-performer' },
+  top100_4seasons: { badge: 'elite-founder', bonus: '+10% seasonal XP' },
+  top10_2seasons: { badge: 'champion-founder', bonus: '+25% seasonal XP' },
+  champion_2seasons: { badge: 'dynasty', bonus: 'Lifetime premium' }
+};
+```
+
+### 3. Multiple Paths to Victory
+
+Not just one leaderboard:
+
+```typescript
+const multipleLeaderboards = [
+  'overall-score',
+  'shipping-velocity',
+  'revenue-growth',
+  'customer-acquisition',
+  'community-contribution',
+  'innovation',
+  'most-improved'
+];
+```
+
+## Conclusion
+
+Seasonal leaderboards solve the fundamental problem of perpetual competition: they give everyone a realistic chance to win, maintain engagement across all skill levels, and create recurring moments of celebration.
+
+In 2026, the best founders don't just compete—they compete seasonally, with fresh starts every quarter and endless opportunities for redemption.
+
+---
+
+**Join the current season** at startup.games. Fresh start, fresh chance to win.
