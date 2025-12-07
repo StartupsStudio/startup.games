@@ -1,0 +1,63 @@
+{
+  "name": "startup.games",
+  "version": "0.1.0",
+  "description": "Gamification platform for founders, builders, and investors",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./api": {
+      "import": "./dist/api.js",
+      "types": "./dist/api.d.ts"
+    },
+    "./competitions": {
+      "import": "./dist/competitions.js",
+      "types": "./dist/competitions.d.ts"
+    },
+    "./leaderboards": {
+      "import": "./dist/leaderboards.js",
+      "types": "./dist/leaderboards.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/api.ts src/competitions.ts src/leaderboards.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "test": "vitest",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "rpc.do": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "keywords": [
+    "gamification",
+    "startup",
+    "founder",
+    "builder",
+    "investor",
+    "competition",
+    "leaderboard",
+    "achievements",
+    "quests"
+  ],
+  "author": "Startups.Studio",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StartupsStudio/startup.games.git"
+  },
+  "homepage": "https://startup.games",
+  "bugs": {
+    "url": "https://github.com/StartupsStudio/startup.games/issues"
+  }
+}

@@ -1,0 +1,90 @@
+---
+title: Quickstart
+description: Connect your startup and start playing
+---
+
+# Quickstart
+
+Get started with Startup Games in under 5 minutes.
+
+## Installation
+
+```bash
+npm install startup.games
+```
+
+## Connect Your Startup
+
+```typescript
+import { Games } from 'startup.games'
+
+// Connect your startup
+const player = await Games.connect({
+  startup: 'MyStartup',
+  player: 'founder@mystartup.com'
+})
+
+// Check your stats
+console.log(player.level)         // 1
+console.log(player.xp)            // 0
+console.log(player.achievements)  // []
+```
+
+## Your First Achievement
+
+Complete your first milestone to unlock an achievement:
+
+```typescript
+// Log a custom event
+await player.events.log({
+  type: 'first-deploy',
+  data: { url: 'https://mystartup.build' }
+})
+
+// 🏆 Achievement Unlocked: First Deploy
+// ⚡ +100 XP
+```
+
+## Start a Quest
+
+```typescript
+// View available quests
+const quests = await player.quests.available()
+
+// Start the launch quest
+await player.quests.start('launch-week')
+
+// Complete quest steps
+await player.quests.completeStep('launch-week', 'prepare-launch')
+await player.quests.completeStep('launch-week', 'announce')
+await player.quests.completeStep('launch-week', 'engage')
+
+// Quest complete!
+// 🎯 +500 XP
+// 🏆 Badge: Launcher
+```
+
+## Check Your Rank
+
+```typescript
+// View your leaderboard position
+const rank = await player.leaderboard.rank('xp')
+console.log(rank)  // #156 of 1,234 players
+```
+
+## Join a Competition
+
+```typescript
+// View active competitions
+const competitions = await player.competitions.available()
+
+// Join one
+await player.competitions.join('launch-challenge-2024')
+```
+
+## What's Next?
+
+- [Explore all achievements](/docs/achievements)
+- [Browse available quests](/docs/quests)
+- [View leaderboards](/docs/leaderboards)
+- [Join competitions](/docs/competitions)

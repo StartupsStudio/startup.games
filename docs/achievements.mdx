@@ -1,0 +1,164 @@
+---
+title: Achievements
+description: Unlock badges for hitting milestones
+---
+
+# Achievements
+
+Achievements are badges you unlock for hitting milestones on your startup journey.
+
+## Overview
+
+Every achievement:
+
+- Has a clear unlock condition
+- Awards XP when unlocked
+- Displays on your profile
+- Can be shared with the community
+
+## Viewing Achievements
+
+```typescript
+import { Achievements } from 'startup.games'
+
+// View all available achievements
+const all = await Achievements.list()
+
+// View by category
+const launch = await Achievements.list({ category: 'launch' })
+const growth = await Achievements.list({ category: 'growth' })
+const revenue = await Achievements.list({ category: 'revenue' })
+```
+
+## Your Achievements
+
+```typescript
+// View your unlocked achievements
+const unlocked = await player.achievements.unlocked()
+
+// Check specific achievement
+const firstUser = await player.achievements.get('first-user')
+
+// {
+//   id: 'first-user',
+//   name: 'First User',
+//   description: 'Get your first user',
+//   unlockedAt: '2024-01-15T10:30:00Z',
+//   xp: 100
+// }
+```
+
+## Achievement Categories
+
+### Launch Achievements
+
+| Achievement | Description | XP |
+|-------------|-------------|-----|
+| First Deploy | Deploy your first version | 100 |
+| Live Site | Launch your marketing site | 100 |
+| First Domain | Claim your first domain | 50 |
+| Open for Business | Complete signup flow | 150 |
+
+### Growth Achievements
+
+| Achievement | Description | XP |
+|-------------|-------------|-----|
+| First User | Get your first user | 100 |
+| Early Traction | Reach 10 users | 200 |
+| Growing | Reach 100 users | 500 |
+| Scaling | Reach 1,000 users | 1,000 |
+| Breakout | Reach 10,000 users | 2,500 |
+
+### Revenue Achievements
+
+| Achievement | Description | XP |
+|-------------|-------------|-----|
+| First Dollar | Earn your first revenue | 200 |
+| $100 MRR | Reach $100 monthly recurring | 300 |
+| $1K MRR | Reach $1,000 monthly recurring | 500 |
+| $10K MRR | Reach $10,000 monthly recurring | 1,000 |
+| $100K MRR | Reach $100,000 monthly recurring | 5,000 |
+
+### Product Achievements
+
+| Achievement | Description | XP |
+|-------------|-------------|-----|
+| Feature Complete | Ship 10 features | 300 |
+| API Builder | Launch a public API | 400 |
+| Mobile Maker | Launch a mobile app | 500 |
+| Platform | Launch SDK or integrations | 600 |
+
+### Community Achievements
+
+| Achievement | Description | XP |
+|-------------|-------------|-----|
+| First Review | Get your first user review | 150 |
+| Featured | Get featured on Product Hunt | 500 |
+| Viral | Content gets 10K+ views | 300 |
+
+### Streak Achievements
+
+| Achievement | Description | XP |
+|-------------|-------------|-----|
+| Week Warrior | 7-day streak | 100 |
+| Month Master | 30-day streak | 500 |
+| Centurion | 100-day streak | 2,000 |
+
+## Automatic Unlocking
+
+With integrations, achievements unlock automatically:
+
+```typescript
+import { Startup } from 'startup-builder'
+import { Games } from 'startup.games'
+
+const startup = await Startup.create({
+  name: 'MyStartup',
+  gamification: true  // Enable auto-tracking
+})
+
+// When you deploy:
+await startup.build({ site: true })
+// 🏆 Achievement Unlocked: Live Site
+
+// When first user signs up:
+// 🏆 Achievement Unlocked: First User
+
+// When you hit milestones:
+// 🏆 Achievement Unlocked: $1K MRR
+```
+
+## Manual Unlocking
+
+For custom milestones:
+
+```typescript
+// Log an event that triggers an achievement
+await player.events.log({
+  type: 'custom-milestone',
+  data: {
+    milestone: 'launched-mobile-app',
+    platform: 'ios'
+  }
+})
+```
+
+## Achievement Notifications
+
+```typescript
+// Listen for achievement unlocks
+player.on('achievement:unlocked', (achievement) => {
+  console.log(`🏆 Unlocked: ${achievement.name}`)
+  console.log(`⚡ +${achievement.xp} XP`)
+})
+```
+
+## Sharing Achievements
+
+```typescript
+// Share on social
+await player.achievements.share('first-user', {
+  platforms: ['twitter', 'linkedin'],
+  message: 'Just got my first user! 🎉'
+})
+```

@@ -1,0 +1,341 @@
+---
+$type: LandingPage
+$id: https://startup.games
+name: Startup Games
+title: Gamification for Founders, Builders, and Investors
+description: Turn your startup journey into a game worth playing. Achievements, quests, leaderboards, and competitions for every milestone.
+---
+
+# Startup Games
+
+## Hero
+
+<Hero
+  badge="Level Up Your Startup"
+  title="Turn Your Startup Journey Into a Game Worth Playing"
+  subtitle="Achievements for every milestone. Quests to guide your path. Leaderboards to see where you stand. Competitions to push you further. The entrepreneurial journey, gamified."
+  primaryCTA={{ label: "Start Playing", href: "/signup" }}
+  secondaryCTA={{ label: "View Leaderboards", href: "/leaderboards" }}
+/>
+
+## Leaderboard Preview
+
+<LeaderboardPreview
+  title="Top Founders This Week"
+  board="weekly-growth"
+  count={5}
+/>
+
+## Problem
+
+<Section variant="problem">
+
+### The Entrepreneurial Grind is Invisible
+
+Building a startup is one of the hardest things you can do:
+
+- **No scoreboard** — You don't know if you're winning or losing
+- **Invisible progress** — Months of work with nothing to show
+- **Isolated celebration** — Big wins feel small when you're alone
+- **Motivation dips** — Hard to push through without feedback
+- **No recognition** — Nobody knows how hard you're working
+
+The journey is epic, but it doesn't feel like it.
+
+</Section>
+
+## Solution
+
+<Section variant="solution">
+
+### What If Building Felt Like Playing?
+
+```typescript
+import { Games } from 'startup.games'
+
+const player = await Games.connect({
+  startup: 'MyStartup'
+})
+
+// 🏆 Achievement Unlocked: First User
+// ⚡ +100 XP
+// 📈 You moved up 12 spots on the leaderboard!
+// 🔥 Streak: 15 days
+
+console.log(player.level)  // Level 12
+console.log(player.rank)   // #42 of 1,234 startups
+```
+
+Every milestone is an achievement. Every challenge is a quest.
+
+</Section>
+
+## Features
+
+<Features
+  title="The Full Game"
+  subtitle="Everything you need to make building feel rewarding."
+  features={[
+    {
+      icon: "trophy",
+      title: "Achievements",
+      description: "Unlock badges for hitting milestones—first user, first dollar, first thousand customers. Every win gets recognized."
+    },
+    {
+      icon: "map",
+      title: "Quests",
+      description: "Structured challenges that guide your journey. Complete quests to earn XP and unlock rewards."
+    },
+    {
+      icon: "bar-chart-2",
+      title: "Leaderboards",
+      description: "See how you rank against other founders. MRR, users, growth rate—compete on the metrics that matter."
+    },
+    {
+      icon: "flag",
+      title: "Competitions",
+      description: "Time-bound challenges with real prizes. Launch competitions, growth challenges, shipping sprints."
+    },
+    {
+      icon: "zap",
+      title: "Streaks",
+      description: "Track consistent execution. Daily activity, weekly shipping, content consistency—keep the streak alive."
+    },
+    {
+      icon: "star",
+      title: "XP & Levels",
+      description: "Aggregate progress into a single score. Level up as you build. Show the world how far you've come."
+    },
+    {
+      icon: "users",
+      title: "Teams",
+      description: "Compete as a team. Co-founders, employees, entire startup studios—team leaderboards and competitions."
+    },
+    {
+      icon: "party-popper",
+      title: "Celebrations",
+      description: "Share your wins with the community. When you celebrate, we all celebrate."
+    }
+  ]}
+/>
+
+## Achievement Gallery
+
+<Section>
+
+### Milestones Worth Celebrating
+
+<AchievementGrid>
+
+**Launch Achievements**
+- 🚀 First Deploy
+- 🌐 Live Site
+- 📦 First Release
+
+**Growth Achievements**
+- 👤 First User
+- 💯 100 Users
+- 🔥 1,000 Users
+- 🦄 10,000 Users
+
+**Revenue Achievements**
+- 💵 First Dollar
+- 📈 $1K MRR
+- 🎯 $10K MRR
+- 💰 $100K MRR
+
+**Shipping Achievements**
+- ⚡ Speed Demon (ship in < 24h)
+- 🔨 Builder (50 deploys)
+- 🏗️ Architect (100 features)
+
+</AchievementGrid>
+
+</Section>
+
+## How It Works
+
+<Steps
+  title="Start Playing in Minutes"
+  steps={[
+    {
+      title: "Connect Your Startup",
+      description: "Link your startup-builder projects for automatic progress tracking.",
+      code: `import { Games } from 'startup.games'
+
+const player = await Games.connect({
+  startup: 'MyStartup',
+  player: 'founder@example.com'
+})`
+    },
+    {
+      title: "Complete Quests",
+      description: "Follow structured challenges to guide your journey.",
+      code: `// View available quests
+const quests = await player.quests.available()
+
+// Start the launch quest
+await player.quests.start('launch-week')
+
+// Track your progress
+const progress = await player.quests.progress('launch-week')
+// { progress: 67%, steps: ['prepare', 'announce', 'engage'] }`
+    },
+    {
+      title: "Climb the Leaderboards",
+      description: "See how you stack up against other founders.",
+      code: `// Check your rank
+const rank = await player.leaderboard.rank('mrr')
+// #42 of 1,234 startups
+
+// View the leaderboard
+const top = await Leaderboards.get('mrr', { limit: 10 })
+
+// Celebrate your wins
+await player.celebrate('hit-10k-mrr')`
+    }
+  ]}
+/>
+
+## Competitions
+
+<Section>
+
+### Current Competitions
+
+<CompetitionList>
+
+**🚀 Launch Challenge 2024**
+Ship a new product and get it to 100 users in 7 days.
+Prize: $5,000 + Featured spot
+
+**📈 Growth Sprint**
+Highest growth rate over 30 days.
+Prize: $2,500 + Premium tools package
+
+**🔥 Shipping Marathon**
+Most deploys in a week.
+Prize: Startup.Games lifetime membership
+
+</CompetitionList>
+
+</Section>
+
+## Stats
+
+<Stats
+  stats={[
+    { value: "10,000+", label: "Players" },
+    { value: "500+", label: "Achievements" },
+    { value: "50+", label: "Leaderboards" },
+    { value: "$100K+", label: "Prizes Awarded" }
+  ]}
+/>
+
+## Testimonials
+
+<Testimonials
+  testimonials={[
+    {
+      quote: "I used to celebrate wins alone. Now my whole community knows when I hit milestones. It makes the grind feel worth it.",
+      author: "Solo Founder",
+      role: "SaaS Startup"
+    },
+    {
+      quote: "The competitions pushed me to ship faster than I ever have. Won my first one and haven't looked back.",
+      author: "Technical Founder",
+      role: "Developer Tools"
+    },
+    {
+      quote: "Seeing my rank climb on the MRR leaderboard is more motivating than any productivity hack I've tried.",
+      author: "Indie Hacker",
+      role: "Bootstrapped Startup"
+    }
+  ]}
+/>
+
+## Pricing
+
+<Pricing
+  title="Start Playing Today"
+  tiers={[
+    {
+      name: "Player",
+      price: "Free",
+      description: "For individual founders",
+      features: [
+        "All achievements",
+        "Public leaderboards",
+        "Community celebrations",
+        "Basic quests",
+        "Monthly competitions"
+      ],
+      cta: { label: "Start Free", href: "/signup" }
+    },
+    {
+      name: "Pro",
+      price: "$19/mo",
+      description: "For serious builders",
+      features: [
+        "Everything in Player",
+        "Private leaderboards",
+        "Advanced quests",
+        "All competitions",
+        "Team features",
+        "Analytics dashboard"
+      ],
+      cta: { label: "Go Pro", href: "/signup?plan=pro" },
+      featured: true
+    },
+    {
+      name: "Studio",
+      price: "$99/mo",
+      description: "For startup studios",
+      features: [
+        "Everything in Pro",
+        "Unlimited team members",
+        "Custom competitions",
+        "Portfolio leaderboards",
+        "White-label options",
+        "Priority support"
+      ],
+      cta: { label: "Contact Sales", href: "/contact" }
+    }
+  ]}
+/>
+
+## FAQ
+
+<FAQ
+  items={[
+    {
+      question: "How do achievements get unlocked?",
+      answer: "Achievements unlock automatically when you hit milestones. If you're using startup-builder or sales-builder, progress is tracked automatically. You can also manually log achievements or connect other data sources."
+    },
+    {
+      question: "Are the leaderboards public?",
+      answer: "Public leaderboards show rankings without revealing exact numbers unless you opt in. You control what metrics are visible. You can also compete on private leaderboards visible only to your team."
+    },
+    {
+      question: "What kind of competitions are there?",
+      answer: "We run launch competitions (ship and get users), growth sprints (highest growth rate), shipping marathons (most deploys), and special themed competitions. Some have cash prizes, others offer tools and recognition."
+    },
+    {
+      question: "Can I use this for my startup studio?",
+      answer: "Absolutely. The Studio plan lets you create portfolio-wide leaderboards, run internal competitions, and gamify the entire portfolio experience. Great for keeping founders motivated and creating healthy competition."
+    },
+    {
+      question: "How does team mode work?",
+      answer: "Teams combine the XP and achievements of all members. You can compete as a team on team leaderboards and in team competitions. Perfect for co-founders, small teams, or entire companies."
+    }
+  ]}
+/>
+
+## CTA
+
+<CTA
+  title="Ready to Level Up?"
+  subtitle="Turn your startup journey into a game worth playing."
+  primaryCTA={{ label: "Start Playing", href: "/signup" }}
+  secondaryCTA={{ label: "View Leaderboards", href: "/leaderboards" }}
+/>

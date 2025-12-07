@@ -1,0 +1,157 @@
+---
+title: Leaderboards
+description: Rankings and competition across key metrics
+---
+
+# Leaderboards
+
+Leaderboards rank players across key startup metrics. See how you compare to other founders.
+
+## Overview
+
+```typescript
+import { Leaderboards } from 'startup.games'
+
+// View available leaderboards
+const boards = await Leaderboards.list()
+// ['mrr', 'users', 'growth-rate', 'xp', 'achievements', 'streak']
+
+// Get a specific leaderboard
+const mrr = await Leaderboards.get('mrr', { limit: 100 })
+```
+
+## Your Rank
+
+```typescript
+// Check your rank on any leaderboard
+const rank = await player.leaderboard.rank('mrr')
+
+// {
+//   rank: 42,
+//   total: 1234,
+//   percentile: 97,
+//   value: 5000,
+//   change: {
+//     day: +3,
+//     week: +15,
+//     month: +42
+//   }
+// }
+```
+
+## Available Leaderboards
+
+### Revenue Leaderboards
+
+| Board | Metric | Description |
+|-------|--------|-------------|
+| `mrr` | Monthly Recurring Revenue | Monthly subscription revenue |
+| `arr` | Annual Recurring Revenue | Annualized revenue |
+| `revenue-growth` | MoM Revenue Growth | Monthly revenue growth rate |
+
+### User Leaderboards
+
+| Board | Metric | Description |
+|-------|--------|-------------|
+| `users` | Total Users | Total registered users |
+| `dau` | Daily Active Users | Users active today |
+| `user-growth` | MoM User Growth | Monthly user growth rate |
+
+### Progress Leaderboards
+
+| Board | Metric | Description |
+|-------|--------|-------------|
+| `xp` | Total XP | Aggregate experience points |
+| `achievements` | Achievements | Total achievements unlocked |
+| `streak` | Current Streak | Days of consistent activity |
+
+### Activity Leaderboards
+
+| Board | Metric | Description |
+|-------|--------|-------------|
+| `ships` | Deploys | Total deployments |
+| `features` | Features Shipped | Features launched |
+| `content` | Content Published | Blog posts, videos, etc. |
+
+## Filtered Leaderboards
+
+```typescript
+// By time period
+const weekly = await Leaderboards.get('mrr', {
+  period: 'week'
+})
+
+// By industry
+const saas = await Leaderboards.get('mrr', {
+  filter: { industry: 'saas' }
+})
+
+// By stage
+const earlyStage = await Leaderboards.get('mrr', {
+  filter: { stage: 'pre-seed' }
+})
+```
+
+## Private Leaderboards
+
+Create leaderboards visible only to your team:
+
+```typescript
+// Create a private leaderboard
+const privateBoard = await Leaderboards.create({
+  name: 'Studio Portfolio',
+  metric: 'mrr',
+  visibility: 'private',
+  members: ['startup1', 'startup2', 'startup3']
+})
+
+// View private leaderboard
+const standings = await privateBoard.get()
+```
+
+## Leaderboard Notifications
+
+```typescript
+// Get notified of rank changes
+player.on('leaderboard:change', (change) => {
+  console.log(`📈 You moved ${change.direction} ${change.positions} spots on ${change.board}`)
+})
+
+// Weekly summary
+player.on('leaderboard:weekly-summary', (summary) => {
+  summary.boards.forEach(board => {
+    console.log(`${board.name}: #${board.rank} (${board.change})`)
+  })
+})
+```
+
+## Privacy Settings
+
+Control what's visible:
+
+```typescript
+await player.privacy.configure({
+  leaderboards: {
+    showRevenue: false,    // Hide actual MRR value
+    showUsers: true,       // Show user count
+    showRank: true,        // Show ranking position
+    showTrend: true        // Show movement direction
+  }
+})
+```
+
+## Leaderboard Seasons
+
+Some leaderboards reset seasonally:
+
+```typescript
+// View seasonal leaderboard
+const q1 = await Leaderboards.get('mrr', {
+  season: '2024-Q1'
+})
+
+// View all-time leaderboard
+const allTime = await Leaderboards.get('mrr', {
+  season: 'all-time'
+})
+```

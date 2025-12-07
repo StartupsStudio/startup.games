@@ -1,0 +1,211 @@
+---
+title: Competitions
+description: Time-bound challenges with real prizes
+---
+
+# Competitions
+
+Competitions are time-bound challenges where you compete against other founders for prizes and recognition.
+
+## Overview
+
+```typescript
+import { Competitions } from 'startup.games'
+
+// View all active competitions
+const active = await Competitions.active()
+
+// View upcoming competitions
+const upcoming = await Competitions.upcoming()
+
+// View past competitions
+const past = await Competitions.past()
+```
+
+## Joining a Competition
+
+```typescript
+// View competition details
+const competition = await Competitions.get('launch-challenge-2024')
+
+// {
+//   id: 'launch-challenge-2024',
+//   name: 'Launch Challenge 2024',
+//   description: 'Ship a new product and get to 100 users in 7 days',
+//   startDate: '2024-03-01',
+//   endDate: '2024-03-08',
+//   prizes: [
+//     { place: 1, prize: '$5,000 + Featured spot' },
+//     { place: 2, prize: '$2,500' },
+//     { place: 3, prize: '$1,000' }
+//   ],
+//   participants: 156,
+//   rules: '...'
+// }
+
+// Join the competition
+await player.competitions.join('launch-challenge-2024')
+```
+
+## Competition Types
+
+### Launch Competitions
+
+Ship a new product and acquire users within a time limit.
+
+```typescript
+const launch = await Competitions.get('launch-sprint')
+
+// Criteria:
+// - New product (not launched before competition)
+// - Live and functional
+// - User count verified
+
+// Scoring:
+// - Users acquired during competition
+// - Quality of product (judged)
+// - Marketing creativity
+```
+
+### Growth Sprints
+
+Highest growth rate during the competition period.
+
+```typescript
+const growth = await Competitions.get('growth-sprint-march')
+
+// Criteria:
+// - Baseline measured at start
+// - Growth measured at end
+// - Percentage increase wins
+
+// Categories:
+// - User growth
+// - Revenue growth
+// - Engagement growth
+```
+
+### Shipping Marathons
+
+Most deployments/features shipped in the time period.
+
+```typescript
+const shipping = await Competitions.get('shipping-week')
+
+// Scoring:
+// - Number of deploys
+// - Features shipped
+// - Quality multiplier (reviewed)
+```
+
+### Themed Competitions
+
+Special competitions around themes or events.
+
+```typescript
+// Examples:
+// - AI Product Challenge
+// - B2B SaaS Showdown
+// - Mobile App Sprint
+// - Open Source Competition
+```
+
+## Submitting Your Entry
+
+```typescript
+// Submit your entry
+await player.competitions.submit('launch-challenge-2024', {
+  product: {
+    name: 'MyNewProduct',
+    url: 'https://mynewproduct.build',
+    description: 'A tool that helps...'
+  },
+  metrics: {
+    users: 127,
+    revenue: 500
+  },
+  story: 'I built this because...'
+})
+```
+
+## Checking Standings
+
+```typescript
+// View current standings
+const standings = await Competitions.standings('launch-challenge-2024')
+
+// [
+//   { rank: 1, player: 'alice', score: 250, ... },
+//   { rank: 2, player: 'bob', score: 198, ... },
+//   ...
+// ]
+
+// Your position
+const myPosition = await player.competitions.rank('launch-challenge-2024')
+// { rank: 12, score: 85, behindLeader: 165 }
+```
+
+## Competition Notifications
+
+```typescript
+// Get competition updates
+player.on('competition:update', (update) => {
+  console.log(`Competition: ${update.competition}`)
+  console.log(`Your rank: ${update.rank}`)
+})
+
+// End of competition
+player.on('competition:ended', (result) => {
+  console.log(`Final rank: ${result.rank}`)
+  if (result.prize) {
+    console.log(`🏆 You won: ${result.prize}`)
+  }
+})
+```
+
+## Team Competitions
+
+```typescript
+import { Teams } from 'startup.games'
+
+// Create or join a team
+const team = await Teams.get('builder-squad')
+
+// Join as a team
+await team.competitions.join('studio-showdown-2024')
+
+// Team standings
+const teamStandings = await Competitions.teamStandings('studio-showdown-2024')
+```
+
+## Creating Private Competitions
+
+For studios or communities:
+
+```typescript
+// Create a private competition
+const privateComp = await Competitions.create({
+  name: 'Internal Q1 Sprint',
+  type: 'growth',
+  startDate: '2024-01-01',
+  endDate: '2024-03-31',
+  visibility: 'private',
+  participants: ['startup1', 'startup2', 'startup3'],
+  prizes: [
+    { place: 1, prize: 'Extra funding consideration' }
+  ]
+})
+```
+
+## Past Winners
+
+```typescript
+// View past competition winners
+const winners = await Competitions.winners('launch-challenge-2023')
+
+// {
+//   first: { player: 'alice', product: 'ProductX', score: 312 },
+//   second: { player: 'bob', product: 'ProductY', score: 287 },
+//   third: { player: 'carol', product: 'ProductZ', score: 245 }
+// }
+```

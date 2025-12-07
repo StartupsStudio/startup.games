@@ -1,0 +1,202 @@
+---
+title: Quests
+description: Structured challenges that guide your journey
+---
+
+# Quests
+
+Quests are structured multi-step challenges that guide you through important milestones and reward completion with XP and badges.
+
+## Overview
+
+```typescript
+import { Quests } from 'startup.games'
+
+// View all available quests
+const all = await Quests.list()
+
+// View quests by category
+const launch = await Quests.list({ category: 'launch' })
+const growth = await Quests.list({ category: 'growth' })
+```
+
+## Your Quests
+
+```typescript
+// View available quests (not started)
+const available = await player.quests.available()
+
+// View active quests (in progress)
+const active = await player.quests.active()
+
+// View completed quests
+const completed = await player.quests.completed()
+```
+
+## Starting a Quest
+
+```typescript
+// View quest details
+const quest = await Quests.get('launch-week')
+
+// {
+//   id: 'launch-week',
+//   name: 'Launch Week',
+//   description: 'Execute a successful product launch',
+//   category: 'launch',
+//   difficulty: 'medium',
+//   estimatedTime: '7 days',
+//   steps: [
+//     { id: 'prepare-launch', name: 'Prepare Launch Assets' },
+//     { id: 'announce', name: 'Announce on Social Media' },
+//     { id: 'producthunt', name: 'Launch on Product Hunt' },
+//     { id: 'engage', name: 'Engage with Community' },
+//     { id: 'report', name: 'Share Results' }
+//   ],
+//   rewards: {
+//     xp: 500,
+//     badge: 'launcher',
+//     achievement: 'successful-launch'
+//   }
+// }
+
+// Start the quest
+await player.quests.start('launch-week')
+```
+
+## Completing Steps
+
+```typescript
+// Complete individual steps
+await player.quests.completeStep('launch-week', 'prepare-launch')
+await player.quests.completeStep('launch-week', 'announce')
+
+// Check progress
+const progress = await player.quests.progress('launch-week')
+
+// {
+//   id: 'launch-week',
+//   status: 'in-progress',
+//   steps: [
+//     { id: 'prepare-launch', completed: true },
+//     { id: 'announce', completed: true },
+//     { id: 'producthunt', completed: false },
+//     { id: 'engage', completed: false },
+//     { id: 'report', completed: false }
+//   ],
+//   progress: 40,  // 2 of 5 steps
+//   startedAt: '2024-03-01T10:00:00Z'
+// }
+```
+
+## Quest Categories
+
+### Launch Quests
+
+| Quest | Steps | Reward |
+|-------|-------|--------|
+| **First Launch** | 3 steps | 200 XP |
+| **Launch Week** | 5 steps | 500 XP + Badge |
+| **Product Hunt Pro** | 7 steps | 750 XP + Badge |
+
+### Growth Quests
+
+| Quest | Steps | Reward |
+|-------|-------|--------|
+| **First 10 Users** | 4 steps | 300 XP |
+| **First 100 Users** | 6 steps | 600 XP + Badge |
+| **Viral Loop** | 5 steps | 500 XP |
+
+### Revenue Quests
+
+| Quest | Steps | Reward |
+|-------|-------|--------|
+| **First Sale** | 3 steps | 250 XP |
+| **Recurring Revenue** | 5 steps | 500 XP + Badge |
+| **Scale to $10K MRR** | 8 steps | 1000 XP + Badge |
+
+### Content Quests
+
+| Quest | Steps | Reward |
+|-------|-------|--------|
+| **Content Creator** | 4 steps | 300 XP |
+| **Thought Leader** | 6 steps | 600 XP + Badge |
+| **Video Producer** | 5 steps | 500 XP |
+
+## Auto-Completing Steps
+
+With integrations, some steps complete automatically:
+
+```typescript
+import { Startup } from 'startup-builder'
+
+// When using startup-builder
+await startup.build({ site: true })
+// ✓ Quest step auto-completed: "prepare-launch"
+
+// When launching on Product Hunt
+await sales.launch({ channels: ['producthunt'] })
+// ✓ Quest step auto-completed: "producthunt"
+```
+
+## Quest Chains
+
+Some quests unlock after completing others:
+
+```typescript
+// Complete prerequisite
+await player.quests.complete('first-launch')
+
+// New quest unlocked
+const newlyAvailable = await player.quests.available()
+// Includes: 'scale-launch', 'multi-product-launch', etc.
+```
+
+## Abandoning Quests
+
+```typescript
+// If you need to abandon a quest
+await player.quests.abandon('launch-week')
+
+// Note: Progress is saved if you restart later
+```
+
+## Quest Notifications
+
+```typescript
+// Listen for quest events
+player.on('quest:step-completed', (step) => {
+  console.log(`✓ Completed: ${step.name}`)
+})
+
+player.on('quest:completed', (quest) => {
+  console.log(`🎯 Quest Complete: ${quest.name}`)
+  console.log(`⚡ +${quest.rewards.xp} XP`)
+})
+
+player.on('quest:available', (quest) => {
+  console.log(`📋 New quest available: ${quest.name}`)
+})
+```
+
+## Daily & Weekly Quests
+
+Repeatable quests that refresh:
+
+```typescript
+// View daily quests
+const daily = await player.quests.daily()
+
+// Examples:
+// - "Ship something" - Deploy at least once
+// - "Engage" - Respond to user feedback
+// - "Create" - Publish content
+
+// View weekly quests
+const weekly = await player.quests.weekly()
+
+// Examples:
+// - "Weekly shipping streak"
+// - "Grow 5% this week"
+// - "Content creator"
+```

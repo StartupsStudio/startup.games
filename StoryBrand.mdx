@@ -1,0 +1,173 @@
+---
+$type: StoryBrand
+$id: https://startup.games/storybrand
+name: Startup Games
+tagline: Gamification for Founders, Builders, and Investors
+oneLiner: Startup Games turns the entrepreneurial journey into an engaging experience with competitions, leaderboards, achievements, and quests—making every milestone worth celebrating and every challenge worth pursuing.
+---
+
+# StoryBrand Framework: Startup Games
+
+## 1. Character (The Hero)
+
+**Who is our customer?**
+
+The Founder, Builder, or Investor who wants to track progress, stay motivated, and compete with peers on the entrepreneurial journey.
+
+**What do they want?**
+
+- Visible progress through their startup journey
+- Recognition for achievements and milestones
+- Healthy competition with peers
+- Motivation to push through difficult phases
+- Community and connection with other builders
+
+## 2. Problem
+
+### External Problem (Tangible)
+
+"Building a startup is a long, often invisible grind. There's no scoreboard, no level-ups, no clear indication that I'm making progress."
+
+### Internal Problem (Emotional)
+
+"It's lonely and demotivating. I don't know if I'm doing well compared to others. I celebrate wins alone and suffer setbacks alone."
+
+### Philosophical Problem
+
+Entrepreneurship is one of the most challenging journeys anyone can take. It deserves to be as engaging and rewarding as a great game—not a solitary slog.
+
+### The Villain
+
+**Invisible Progress & Isolation** — The lack of tangible feedback, recognition, and community that makes the entrepreneurial journey feel like an endless, thankless grind.
+
+## 3. Guide (The Brand)
+
+**Position:** We've built the gamification layer for the startup ecosystem—turning invisible progress into visible achievements.
+
+**Empathy:** We've been founders ourselves. We know the highs and lows, and how much a small win can mean on a hard day.
+
+**Authority:**
+
+- Integrated with startup-builder, sales-builder, and builder.domains
+- Real metrics tied to real startup progress
+- Community of active founders and builders
+- Backed by Startups.Studio portfolio insights
+
+## 4. Plan (The Path)
+
+### Step 1: Connect Your Startup
+
+Link your startup-builder projects to track real progress automatically.
+
+```typescript
+import { Games } from 'startup.games'
+
+const player = await Games.connect({
+  startup: 'MyStartup',
+  player: 'founder@mystartup.com'
+})
+```
+
+### Step 2: Complete Quests & Earn Achievements
+
+Progress through structured quests and unlock achievements for hitting milestones.
+
+```typescript
+// Check available quests
+const quests = await player.quests.available()
+
+// Complete a quest
+await player.quests.complete('first-customer')
+
+// View achievements
+const achievements = await player.achievements.list()
+```
+
+### Step 3: Compete & Celebrate
+
+Join competitions, climb leaderboards, and celebrate with the community.
+
+```typescript
+// Join a competition
+await player.competitions.join('launch-challenge-2024')
+
+// Check your ranking
+const rank = await player.leaderboard.rank('mrr')
+
+// Share your wins
+await player.celebrate('hit-10k-mrr')
+```
+
+## 5. Call to Action
+
+**Direct CTA:** Start Playing → `npx startup.games connect`
+
+**Transitional CTA:** View Leaderboards at startup.games
+
+## 6. Success (What's at Stake)
+
+**Success looks like:**
+
+- Every milestone feels like an achievement worth celebrating
+- Clear visibility into progress compared to peers
+- Motivation renewed through gamified challenges
+- Community recognition for real accomplishments
+- The entrepreneurial journey becomes engaging, not draining
+
+**Transformation:**
+
+From: Grinding alone with no sense of progress
+To: Playing a meaningful game with achievements, recognition, and community
+
+## 7. Failure (What We Help Them Avoid)
+
+**Failure looks like:**
+
+- Burnout from the invisible grind
+- Giving up before reaching key milestones
+- Missing motivation on difficult days
+- Building in isolation without community support
+- Celebrating wins alone (or not at all)
+
+## 8. Brand Identity
+
+**Voice:** Encouraging, competitive, celebratory
+
+**Tone:** Fun, motivating, community-driven
+
+**Key Messages:**
+
+1. "Turn your startup journey into a game worth playing."
+2. "Every milestone is an achievement. Every challenge is a quest."
+3. "Build together. Compete together. Celebrate together."
+
+## 9. Core Capabilities
+
+| Capability | Description | Endpoint |
+|------------|-------------|----------|
+| **Achievements** | Unlock badges for hitting milestones | `api.startup.games/achievements` |
+| **Quests** | Structured challenges with rewards | `api.startup.games/quests` |
+| **Leaderboards** | Rankings across key metrics | `api.startup.games/leaderboards` |
+| **Competitions** | Time-bound challenges with prizes | `api.startup.games/competitions` |
+| **Streaks** | Track consistent execution | `api.startup.games/streaks` |
+| **XP & Levels** | Aggregate progress indicator | `api.startup.games/xp` |
+| **Teams** | Compete as a team | `api.startup.games/teams` |
+| **Celebrations** | Share and celebrate wins | `api.startup.games/celebrate` |
+
+## 10. Messaging by Audience
+
+### For Founders
+
+"Your startup journey is epic—it should feel like it. Startup Games gives you achievements for every milestone, quests to guide your next steps, and leaderboards to see how you stack up. Turn the grind into a game."
+
+### For Builders
+
+"Ship features, unlock achievements. Complete projects, climb leaderboards. Startup Games makes every commit, every deployment, every PR feel like progress in a game worth playing."
+
+### For Investors
+
+"Track your portfolio's progress gamified. See which founders are hitting milestones, maintaining streaks, and climbing the ranks. Gamification reveals who's truly executing."
+
+### For Startup Studios
+
+"Gamify your entire portfolio. Create studio-wide competitions, track which startups are progressing fastest, and keep founders motivated with visible progress and recognition."

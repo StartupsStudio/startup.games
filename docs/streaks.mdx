@@ -1,0 +1,196 @@
+---
+title: Streaks
+description: Track consistent execution
+---
+
+# Streaks
+
+Streaks reward consistent execution. The longer you maintain a streak, the more XP you earn.
+
+## Overview
+
+```typescript
+// View your streaks
+const streaks = await player.streaks.list()
+
+// {
+//   daily: { current: 15, best: 42, lastActivity: '2024-03-15' },
+//   shipping: { current: 5, best: 10, lastActivity: '2024-03-12' },
+//   content: { current: 8, best: 15, lastActivity: '2024-03-14' },
+//   sales: { current: 3, best: 7, lastActivity: '2024-03-15' }
+// }
+```
+
+## Streak Types
+
+### Daily Streak
+
+Any meaningful activity counts:
+
+```typescript
+// Activities that count:
+// - Logging in to your startup dashboard
+// - Making a deploy
+// - Publishing content
+// - Responding to users
+// - Any tracked event
+
+// View daily streak
+const daily = await player.streaks.get('daily')
+// { current: 15, best: 42 }
+```
+
+### Shipping Streak
+
+Consecutive weeks with at least one deploy:
+
+```typescript
+// Counted per week
+// Must ship at least once per week to maintain
+
+const shipping = await player.streaks.get('shipping')
+// { current: 5, best: 10 } // weeks
+```
+
+### Content Streak
+
+Consecutive weeks publishing content:
+
+```typescript
+// Includes:
+// - Blog posts
+// - Social media posts
+// - Videos
+// - Newsletter issues
+
+const content = await player.streaks.get('content')
+// { current: 8, best: 15 } // weeks
+```
+
+### Sales Streak
+
+Consecutive weeks with new customers:
+
+```typescript
+// At least one new paying customer per week
+
+const sales = await player.streaks.get('sales')
+// { current: 3, best: 7 } // weeks
+```
+
+## Streak Bonuses
+
+Longer streaks earn more XP:
+
+| Streak Length | Daily XP Bonus |
+|---------------|----------------|
+| 1-6 days | +10 XP |
+| 7-13 days | +25 XP |
+| 14-29 days | +50 XP |
+| 30-59 days | +100 XP |
+| 60-89 days | +150 XP |
+| 90+ days | +200 XP |
+
+## Streak Achievements
+
+| Achievement | Requirement | XP |
+|-------------|-------------|-----|
+| Week Warrior | 7-day streak | 100 |
+| Fortnight | 14-day streak | 200 |
+| Month Master | 30-day streak | 500 |
+| Sixty Days | 60-day streak | 1,000 |
+| Centurion | 100-day streak | 2,000 |
+| Year-Long | 365-day streak | 10,000 |
+
+## Streak Protection
+
+Life happens. Streak shields protect your progress:
+
+```typescript
+// Use a streak shield (prevents streak loss for one day)
+await player.streaks.useShield('daily')
+
+// View available shields
+const shields = await player.streaks.shields()
+// { available: 2, nextRefresh: '2024-04-01' }
+
+// Shields refresh monthly on Pro plan
+```
+
+## Streak Recovery
+
+Recover a lost streak within a grace period:
+
+```typescript
+// If streak was lost recently
+const recovery = await player.streaks.recover('daily')
+
+// {
+//   available: true,
+//   cost: 100,  // XP cost to recover
+//   originalStreak: 42,
+//   gracePeriod: '24 hours remaining'
+// }
+
+// Recover the streak
+await player.streaks.recover('daily', { confirm: true })
+```
+
+## Streak Notifications
+
+```typescript
+// Get notified about streaks
+player.on('streak:maintained', (streak) => {
+  console.log(`🔥 ${streak.type} streak: ${streak.current} days`)
+})
+
+player.on('streak:milestone', (streak) => {
+  console.log(`🎉 Streak milestone: ${streak.current} days!`)
+})
+
+player.on('streak:at-risk', (streak) => {
+  console.log(`⚠️ Your ${streak.type} streak is at risk!`)
+  console.log(`Time remaining: ${streak.timeRemaining}`)
+})
+
+player.on('streak:lost', (streak) => {
+  console.log(`💔 ${streak.type} streak ended at ${streak.final} days`)
+})
+```
+
+## Auto-Tracking
+
+With integrations, streaks are tracked automatically:
+
+```typescript
+import { Startup } from 'startup-builder'
+
+const startup = await Startup.create({
+  name: 'MyStartup',
+  gamification: true
+})
+
+// Deploys automatically count toward shipping streak
+await startup.deploy()
+
+// Content automatically counts toward content streak
+await sales.content.publish()
+```
+
+## Viewing Streak History
+
+```typescript
+// View streak history
+const history = await player.streaks.history('daily', {
+  period: 'last-90-days'
+})
+
+// {
+//   streaks: [
+//     { start: '2024-01-01', end: '2024-01-15', length: 15 },
+//     { start: '2024-01-20', end: '2024-03-15', length: 55, current: true }
+//   ],
+//   totalDays: 70,
+//   averageStreak: 35
+// }
+```
