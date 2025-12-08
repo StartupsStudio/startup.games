@@ -310,9 +310,10 @@ export default defineConfig({
 
 | Package | Description |
 |---------|-------------|
-| [startup-builder](https://github.com/StartupsStudio/startup-builder) | Build autonomous startups |
-| [sales-builder](https://github.com/StartupsStudio/sales-builder) | Autonomous sales workflows |
-| [builder.domains](https://github.com/StartupsStudio/builder.domains) | Free domains for builders |
+| [startup-builder](https://npmjs.com/package/startup-builder) | Build autonomous startups |
+| [sales-builder](https://npmjs.com/package/sales-builder) | Autonomous sales workflows |
+| [service-builder](https://npmjs.com/package/service-builder) | AI-delivered Services-as-Software |
+| [builder.domains](https://npmjs.com/package/builder.domains) | Free domains for builders |
 
 ## License
 
